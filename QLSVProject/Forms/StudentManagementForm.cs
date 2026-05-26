@@ -1,191 +1,514 @@
-﻿    using System;
-    using System.Configuration;
-    using System.Data;
-    using Microsoft.Data.SqlClient;
-    using System.Drawing;
-    using System.Windows.Forms;
+﻿//    using System;
+//    using System.Configuration;
+//    using System.Data;
+//    using Microsoft.Data.SqlClient;
+//    using System.Drawing;
+//    using System.Windows.Forms;
+//using System.Security.Cryptography;
 
-    namespace QLSVNhomApp
+//namespace QLSVNhomApp
+//    {
+//        public partial class StudentManagementForm : Form
+//        {
+//            private string connectionString =
+//                ConfigurationManager.ConnectionStrings["QLSVNhomConnection"].ConnectionString;
+
+//            private string classManv;
+//            private string malop;
+//            private string manv;
+//            private string password;
+
+//            private ClassManagementForm classManagementForm;
+
+//            private DataGridView dgvStudents;
+
+//            private Button btnAdd;
+//            private Button btnUpdate;
+//            private Button btnDelete;
+//            private Button btnManageScores;
+//            private Button btnRefresh;
+
+//            public StudentManagementForm(string classManv, string malop, string manv, string password, ClassManagementForm classManagementForm)
+//                {
+//                    this.classManv = classManv;
+//                    this.malop = malop;
+//                    this.manv = manv;
+//                    this.password = password;
+//                    this.classManagementForm = classManagementForm;
+
+//                    InitializeComponent();
+//                    this.FormClosed += (s, e) => classManagementForm.Show();
+//                }
+
+//            // ================= UI =================
+//            private void InitializeComponent()
+//            {
+//                this.Text = "Quản lý sinh viên";
+//                this.Size = new Size(1200, 750);  
+//                this.StartPosition = FormStartPosition.CenterScreen;
+//                this.BackColor = Color.FromArgb(245, 247, 250);
+
+//                Label title = new Label()
+//                {
+//                    Text = "QUẢN LÝ SINH VIÊN",
+//                    Font = new Font("Segoe UI", 18, FontStyle.Bold),
+//                    ForeColor = Color.FromArgb(33, 37, 41),
+//                    AutoSize = false,
+//                    TextAlign = ContentAlignment.MiddleCenter,
+//                    Size = new Size(1150, 50),
+//                    Location = new Point(20, 10)
+//                };
+
+//                dgvStudents = new DataGridView()
+//                {
+//                    Location = new Point(20, 70),
+//                    Size = new Size(1150, 450),  
+//                    AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
+//                    ReadOnly = true,
+//                    SelectionMode = DataGridViewSelectionMode.FullRowSelect,
+//                    MultiSelect = false,
+//                    BackgroundColor = Color.White,
+//                    BorderStyle = BorderStyle.Fixed3D
+//                };
+
+//                btnAdd = CreateButton("Thêm", new Point(20, 550), Color.FromArgb(0, 122, 204));
+//                btnUpdate = CreateButton("Sửa", new Point(180, 550), Color.FromArgb(0, 122, 204));
+//                btnDelete = CreateButton("Xóa", new Point(340, 550), Color.FromArgb(220, 53, 69));
+//                btnManageScores = CreateButton("Nhập điểm", new Point(500, 550), Color.FromArgb(40, 167, 69));
+//                btnRefresh = CreateButton("Tải lại", new Point(660, 550), Color.Gray);
+
+//                btnAdd.Size = new Size(140, 45);
+//                btnUpdate.Size = new Size(140, 45);
+//                btnDelete.Size = new Size(140, 45);
+//                btnManageScores.Size = new Size(140, 45);
+//                btnRefresh.Size = new Size(140, 45);
+
+//                btnAdd.Click += BtnAdd_Click;
+//                btnUpdate.Click += BtnUpdate_Click;
+//                btnDelete.Click += BtnDelete_Click;
+//                btnManageScores.Click += BtnManageScores_Click;
+//                btnRefresh.Click += (s, e) => LoadStudents();
+
+//                this.Controls.AddRange(new Control[]
+//                {
+//            title,
+//            dgvStudents,
+//            btnAdd, btnUpdate, btnDelete, btnManageScores, btnRefresh
+//                });
+
+//                LoadStudents();
+//            }
+//            private Button CreateButton(string text, Point location, Color backColor)
+//            {
+//                return new Button()
+//                {
+//                    Text = text,
+//                    Size = new Size(130, 40),
+//                    Location = location,
+//                    BackColor = backColor,
+//                    ForeColor = Color.White,
+//                    FlatStyle = FlatStyle.Flat,
+//                    Font = new Font("Segoe UI", 9, FontStyle.Bold)
+//                };
+//            }
+
+//            // ================= LOAD =================
+//            private void LoadStudents()
+//            {
+//                try
+//                {
+//                    using (SqlConnection conn = new SqlConnection(connectionString))
+//                    {
+//                        conn.Open();
+
+//                        SqlCommand cmd = new SqlCommand("SP_SEL_PUBLIC_SINHVIEN", conn);
+//                        cmd.CommandType = CommandType.StoredProcedure;
+
+//                        cmd.Parameters.AddWithValue("@MALOP", malop);
+
+//                        SqlDataAdapter da = new SqlDataAdapter(cmd);
+//                        DataTable dt = new DataTable();
+//                        da.Fill(dt);
+
+//                        dgvStudents.DataSource = dt;
+//                    }
+//                }
+//                catch (Exception ex)
+//                {
+//                    MessageBox.Show(ex.Message);
+//                }
+//            }
+
+//            // ================= INPUT BOX CUSTOM =================
+//            private string Prompt(string title, string text, string defaultValue = "")
+//            {
+//                Form f = new Form();
+//                f.Width = 350;
+//                f.Height = 180;
+//                f.Text = title;
+//                f.StartPosition = FormStartPosition.CenterScreen;
+
+//                Label lbl = new Label() { Left = 20, Top = 20, Text = text, Width = 280 };
+//                TextBox txt = new TextBox() { Left = 20, Top = 50, Width = 280 };
+//                txt.Text = defaultValue;
+
+//                Button ok = new Button() { Text = "OK", Left = 120, Width = 80, Top = 90 };
+//                ok.DialogResult = DialogResult.OK;
+
+//                f.Controls.Add(lbl);
+//                f.Controls.Add(txt);
+//                f.Controls.Add(ok);
+
+//                f.AcceptButton = ok;
+
+//                return f.ShowDialog() == DialogResult.OK ? txt.Text : "";
+//            }
+//            private void BtnAdd_Click(object sender, EventArgs e)
+//            {
+//                try
+//                {
+//                    string masv = Prompt("Thêm sinh viên", "Nhập mã SV:");
+//                    string hoten = Prompt("Thêm sinh viên", "Nhập họ tên:");
+//                    string ngaysinh = Prompt("Thêm sinh viên", "Nhập ngày sinh (yyyy-MM-dd):");
+//                    string diachi = Prompt("Thêm sinh viên", "Nhập địa chỉ:");
+//                    string tendn = Prompt("Tài khoản SV", "Tên đăng nhập:");
+//                    string mk = Prompt("Tài khoản SV", "Mật khẩu:");
+
+//                    if (string.IsNullOrWhiteSpace(masv) ||
+//                        string.IsNullOrWhiteSpace(hoten) ||
+//                        string.IsNullOrWhiteSpace(ngaysinh) ||
+//                        string.IsNullOrWhiteSpace(diachi) ||
+//                        string.IsNullOrWhiteSpace(tendn) ||
+//                        string.IsNullOrWhiteSpace(mk))
+//                    {
+//                        MessageBox.Show("Không được để trống!");
+//                        return;
+//                    }
+
+//                    using (SqlConnection conn = new SqlConnection(connectionString))
+//                    {
+//                        conn.Open();
+
+//                        SqlCommand cmd = new SqlCommand("SP_INS_PUBLIC_SINHVIEN", conn);
+//                        cmd.CommandType = CommandType.StoredProcedure;
+
+//                        cmd.Parameters.AddWithValue("@MASV", masv);
+//                        cmd.Parameters.AddWithValue("@HOTEN", hoten);
+//                        cmd.Parameters.AddWithValue("@NGAYSINH", DateTime.Parse(ngaysinh));
+//                        cmd.Parameters.AddWithValue("@DIACHI", diachi);
+//                        cmd.Parameters.AddWithValue("@MALOP", malop);
+//                        cmd.Parameters.AddWithValue("@TENDN", tendn);
+//                        cmd.Parameters.AddWithValue("@MK", mk);
+//                        cmd.Parameters.AddWithValue("@MANV", manv); // ✔ FIX QUYỀN
+
+//                        cmd.ExecuteNonQuery();
+//                    }
+
+//                    MessageBox.Show("Thêm sinh viên thành công!");
+//                    LoadStudents();
+//                }
+//                catch (SqlException ex)
+//                {
+//                    MessageBox.Show("SQL Error: " + ex.Message);
+//                }
+//                catch (Exception ex)
+//                {
+//                    MessageBox.Show("Lỗi: " + ex.Message);
+//                }
+//            }
+
+//            private void BtnUpdate_Click(object sender, EventArgs e)
+//            {
+//                if (dgvStudents.SelectedRows.Count == 0)
+//                {
+//                    MessageBox.Show("Vui lòng chọn sinh viên!");
+//                    return;
+//                }
+
+//                // ===== lấy dữ liệu cũ =====
+//                var row = dgvStudents.SelectedRows[0];
+
+//                string masv = row.Cells["MASV"].Value.ToString();
+//                string hotenOld = row.Cells["HOTEN"].Value.ToString();
+//                string ngaysinhOld = row.Cells["NGAYSINH"].Value.ToString();
+//                string diachiOld = row.Cells["DIACHI"].Value.ToString();
+
+//                // ===== nhập lại nhưng có sẵn dữ liệu cũ =====
+//                string hoten = Prompt("Cập nhật sinh viên", "Họ tên:", hotenOld);
+//                string ngaysinh = Prompt("Cập nhật sinh viên", "Ngày sinh (yyyy-MM-dd):", ngaysinhOld);
+//                string diachi = Prompt("Cập nhật sinh viên", "Địa chỉ:", diachiOld);
+
+//                if (hoten == "" || ngaysinh == "" || diachi == "")
+//                {
+//                    MessageBox.Show("Không được để trống!");
+//                    return;
+//                }
+
+//                try
+//                {
+//                    using (SqlConnection conn = new SqlConnection(connectionString))
+//                    {
+//                        conn.Open();
+
+//                        SqlCommand cmd = new SqlCommand("SP_UPD_PUBLIC_SINHVIEN", conn);
+//                        cmd.CommandType = CommandType.StoredProcedure;
+
+//                        cmd.Parameters.AddWithValue("@MASV", masv);
+//                        cmd.Parameters.AddWithValue("@HOTEN", hoten);
+//                        cmd.Parameters.AddWithValue("@NGAYSINH", DateTime.Parse(ngaysinh));
+//                        cmd.Parameters.AddWithValue("@DIACHI", diachi);
+//                        cmd.Parameters.AddWithValue("@MALOP", malop);
+//                        cmd.Parameters.AddWithValue("@MANV", manv);
+
+//                        cmd.ExecuteNonQuery();
+//                    }
+
+//                    MessageBox.Show("Cập nhật thành công!");
+//                    LoadStudents();
+//                }
+//                catch (Exception ex)
+//                {
+//                    MessageBox.Show(ex.Message);
+//                }
+//            }
+
+//            // ================= DELETE =================
+//            private void BtnDelete_Click(object sender, EventArgs e)
+//            {
+//                if (dgvStudents.SelectedRows.Count == 0)
+//                {
+//                    MessageBox.Show("Chọn sinh viên!");
+//                    return;
+//                }
+
+//                string masv = dgvStudents.SelectedRows[0].Cells["MASV"].Value.ToString();
+
+//                DialogResult confirm = MessageBox.Show(
+//                    "Bạn có chắc muốn xóa sinh viên này?",
+//                    "Xác nhận",
+//                    MessageBoxButtons.YesNo,
+//                    MessageBoxIcon.Warning);
+
+//                if (confirm != DialogResult.Yes)
+//                    return;
+
+//                try
+//                {
+//                    using (SqlConnection conn = new SqlConnection(connectionString))
+//                    {
+//                        conn.Open();
+
+//                        SqlCommand cmd = new SqlCommand("SP_DEL_PUBLIC_SINHVIEN", conn);
+//                        cmd.CommandType = CommandType.StoredProcedure;
+
+//                        cmd.Parameters.AddWithValue("@MASV", masv);
+//                        cmd.Parameters.AddWithValue("@MANV", manv); 
+
+//                        cmd.ExecuteNonQuery();
+//                    }
+
+//                    MessageBox.Show("Xóa sinh viên thành công!");
+//                    LoadStudents();
+//                }
+//                catch (SqlException ex)
+//                {
+//                    MessageBox.Show("Không thể xóa:\n" + ex.Message);
+//                }
+//                catch (Exception ex)
+//                {
+//                    MessageBox.Show("Lỗi hệ thống:\n" + ex.Message);
+//                }
+//            }
+
+//            // ================= SCORE =================
+//            private void BtnManageScores_Click(object sender, EventArgs e)
+//            {
+//                if (dgvStudents.SelectedRows.Count == 0)
+//                {
+//                    MessageBox.Show("Chọn sinh viên!");
+//                    return;
+//                }
+
+//                if (classManv.Trim().ToLower() != manv.Trim())
+//                {
+//                    MessageBox.Show("Ban khong co quyen xem diem");
+//                    return;
+//                }
+
+//                string masv = dgvStudents.SelectedRows[0].Cells["MASV"].Value.ToString();
+
+//                // ===== LẤY MALOP CỦA SINH VIÊN =====
+//                string malopSinhVien = dgvStudents
+//                    .SelectedRows[0]
+//                    .Cells["MALOP"]
+//                    .Value.ToString();
+
+//                // ===== SO SÁNH QUYỀN =====
+//                if (malopSinhVien.Trim() != this.malop.Trim())
+//                {
+//                    MessageBox.Show("Bạn không có quyền nhập điểm cho sinh viên lớp này!");
+//                    return;
+//                }
+
+//                ScoreManagementForm f = new ScoreManagementForm(masv, manv, password, this);
+
+//                this.Hide();
+//                f.ShowDialog();
+//                this.Show();
+//            }
+//        }
+//    }
+
+using System;
+using System.Configuration;
+using System.Data;
+using Microsoft.Data.SqlClient;
+using System.Drawing;
+using System.Windows.Forms;
+
+namespace QLSVNhomApp
+{
+    public partial class StudentManagementForm : Form
     {
-        public partial class StudentManagementForm : Form
+        private string connectionString =
+            ConfigurationManager.ConnectionStrings["QLSVNhomConnection"].ConnectionString;
+
+        private string classManv;
+        private string malop;
+        private string manv;
+        private string password;
+
+        private ClassManagementForm classManagementForm;
+
+        private DataGridView dgvStudents;
+
+        private Button btnAdd;
+        private Button btnUpdate;
+        private Button btnDelete;
+        private Button btnManageScores;
+        private Button btnRefresh;
+
+        public StudentManagementForm(string classManv, string malop,
+            string manv, string password,
+            ClassManagementForm classManagementForm)
         {
-            private string connectionString =
-                ConfigurationManager.ConnectionStrings["QLSVNhomConnection"].ConnectionString;
+            this.classManv = classManv;
+            this.malop = malop;
+            this.manv = manv;
+            this.password = password;
+            this.classManagementForm = classManagementForm;
 
-            private string malop;
-            private string manv;
-            private string password;
+            InitializeComponent();
+            this.FormClosed += (s, e) => classManagementForm.Show();
+        }
 
-            private ClassManagementForm classManagementForm;
+        // ================= UI =================
+        private void InitializeComponent()
+        {
+            this.Text = "Quản lý sinh viên";
+            this.Size = new Size(1200, 750);
+            this.StartPosition = FormStartPosition.CenterScreen;
+            this.BackColor = Color.FromArgb(245, 247, 250);
 
-            private DataGridView dgvStudents;
-
-            private Button btnAdd;
-            private Button btnUpdate;
-            private Button btnDelete;
-            private Button btnManageScores;
-            private Button btnRefresh;
-
-            public StudentManagementForm(
-                string malop,
-                string manv,
-                string password,
-                ClassManagementForm classManagementForm)
+            Label title = new Label()
             {
-                this.malop = malop;
-                this.manv = manv;
-                this.password = password;
-                this.classManagementForm = classManagementForm;
+                Text = "QUẢN LÝ SINH VIÊN",
+                Font = new Font("Segoe UI", 18, FontStyle.Bold),
+                ForeColor = Color.FromArgb(33, 37, 41),
+                AutoSize = false,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Size = new Size(1150, 50),
+                Location = new Point(20, 10)
+            };
 
-                InitializeComponent();
-                this.FormClosed += (s, e) => classManagementForm.Show();
-            }
-
-            // ================= UI =================
-            private void InitializeComponent()
+            dgvStudents = new DataGridView()
             {
-                this.Text = "Quản lý sinh viên";
-                this.Size = new Size(1200, 750);  
-                this.StartPosition = FormStartPosition.CenterScreen;
-                this.BackColor = Color.FromArgb(245, 247, 250);
+                Location = new Point(20, 70),
+                Size = new Size(1150, 450),
+                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
+                ReadOnly = true,
+                SelectionMode = DataGridViewSelectionMode.FullRowSelect,
+                MultiSelect = false,
+                BackgroundColor = Color.White,
+                BorderStyle = BorderStyle.Fixed3D
+            };
 
-                Label title = new Label()
-                {
-                    Text = "QUẢN LÝ SINH VIÊN",
-                    Font = new Font("Segoe UI", 18, FontStyle.Bold),
-                    ForeColor = Color.FromArgb(33, 37, 41),
-                    AutoSize = false,
-                    TextAlign = ContentAlignment.MiddleCenter,
-                    Size = new Size(1150, 50),
-                    Location = new Point(20, 10)
-                };
+            btnAdd = CreateButton("➕ Thêm", new Point(20, 550), Color.FromArgb(0, 122, 204));
+            btnUpdate = CreateButton("✏️ Sửa", new Point(180, 550), Color.FromArgb(0, 122, 204));
+            btnDelete = CreateButton("🗑️ Xóa", new Point(340, 550), Color.FromArgb(220, 53, 69));
+            btnManageScores = CreateButton("📊 Nhập điểm", new Point(500, 550), Color.FromArgb(40, 167, 69));
+            btnRefresh = CreateButton("🔄 Tải lại", new Point(660, 550), Color.Gray);
 
-                dgvStudents = new DataGridView()
-                {
-                    Location = new Point(20, 70),
-                    Size = new Size(1150, 450),  
-                    AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
-                    ReadOnly = true,
-                    SelectionMode = DataGridViewSelectionMode.FullRowSelect,
-                    MultiSelect = false,
-                    BackgroundColor = Color.White,
-                    BorderStyle = BorderStyle.Fixed3D
-                };
+            btnAdd.Click += BtnAdd_Click;
+            btnUpdate.Click += BtnUpdate_Click;
+            btnDelete.Click += BtnDelete_Click;
+            btnManageScores.Click += BtnManageScores_Click;
+            btnRefresh.Click += (s, e) => LoadStudents();
 
-                btnAdd = CreateButton("Thêm", new Point(20, 550), Color.FromArgb(0, 122, 204));
-                btnUpdate = CreateButton("Sửa", new Point(180, 550), Color.FromArgb(0, 122, 204));
-                btnDelete = CreateButton("Xóa", new Point(340, 550), Color.FromArgb(220, 53, 69));
-                btnManageScores = CreateButton("Nhập điểm", new Point(500, 550), Color.FromArgb(40, 167, 69));
-                btnRefresh = CreateButton("Tải lại", new Point(660, 550), Color.Gray);
-
-                btnAdd.Size = new Size(140, 45);
-                btnUpdate.Size = new Size(140, 45);
-                btnDelete.Size = new Size(140, 45);
-                btnManageScores.Size = new Size(140, 45);
-                btnRefresh.Size = new Size(140, 45);
-
-                btnAdd.Click += BtnAdd_Click;
-                btnUpdate.Click += BtnUpdate_Click;
-                btnDelete.Click += BtnDelete_Click;
-                btnManageScores.Click += BtnManageScores_Click;
-                btnRefresh.Click += (s, e) => LoadStudents();
-
-                this.Controls.AddRange(new Control[]
-                {
-            title,
-            dgvStudents,
-            btnAdd, btnUpdate, btnDelete, btnManageScores, btnRefresh
-                });
-
-                LoadStudents();
-            }
-            private Button CreateButton(string text, Point location, Color backColor)
+            this.Controls.AddRange(new Control[]
             {
-                return new Button()
-                {
-                    Text = text,
-                    Size = new Size(130, 40),
-                    Location = location,
-                    BackColor = backColor,
-                    ForeColor = Color.White,
-                    FlatStyle = FlatStyle.Flat,
-                    Font = new Font("Segoe UI", 9, FontStyle.Bold)
-                };
-            }
+                title,
+                dgvStudents,
+                btnAdd, btnUpdate, btnDelete, btnManageScores, btnRefresh
+            });
 
-            // ================= LOAD =================
-            private void LoadStudents()
+            LoadStudents();
+        }
+
+        private Button CreateButton(string text, Point location, Color backColor)
+        {
+            Button btn = new Button()
             {
-                try
+                Text = text,
+                Size = new Size(140, 45),
+                Location = location,
+                BackColor = backColor,
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 9, FontStyle.Bold),
+                Cursor = Cursors.Hand
+            };
+            btn.FlatAppearance.BorderSize = 0;
+            return btn;
+        }
+
+        // ================= LOAD =================
+        private void LoadStudents()
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
                 {
-                    using (SqlConnection conn = new SqlConnection(connectionString))
-                    {
-                        conn.Open();
+                    conn.Open();
 
-                        SqlCommand cmd = new SqlCommand("SP_SEL_PUBLIC_SINHVIEN", conn);
-                        cmd.CommandType = CommandType.StoredProcedure;
+                    SqlCommand cmd = new SqlCommand("SP_SEL_PUBLIC_SINHVIEN", conn);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@MALOP", malop);
 
-                        cmd.Parameters.AddWithValue("@MALOP", malop);
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
 
-                        SqlDataAdapter da = new SqlDataAdapter(cmd);
-                        DataTable dt = new DataTable();
-                        da.Fill(dt);
-
-                        dgvStudents.DataSource = dt;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
+                    dgvStudents.DataSource = dt;
                 }
             }
-
-            // ================= INPUT BOX CUSTOM =================
-            private string Prompt(string title, string text, string defaultValue = "")
+            catch (Exception ex)
             {
-                Form f = new Form();
-                f.Width = 350;
-                f.Height = 180;
-                f.Text = title;
-                f.StartPosition = FormStartPosition.CenterScreen;
-
-                Label lbl = new Label() { Left = 20, Top = 20, Text = text, Width = 280 };
-                TextBox txt = new TextBox() { Left = 20, Top = 50, Width = 280 };
-                txt.Text = defaultValue;
-
-                Button ok = new Button() { Text = "OK", Left = 120, Width = 80, Top = 90 };
-                ok.DialogResult = DialogResult.OK;
-
-                f.Controls.Add(lbl);
-                f.Controls.Add(txt);
-                f.Controls.Add(ok);
-
-                f.AcceptButton = ok;
-
-                return f.ShowDialog() == DialogResult.OK ? txt.Text : "";
+                MessageBox.Show("Lỗi tải dữ liệu:\n" + ex.Message,
+                    "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            private void BtnAdd_Click(object sender, EventArgs e)
+        }
+
+        // ================= THÊM =================
+        private void BtnAdd_Click(object sender, EventArgs e)
+        {
+            // Mở form thêm mới — các ô trống, có placeholder
+            using (StudentFormDialog dlg = new StudentFormDialog())
             {
+                if (dlg.ShowDialog() != DialogResult.OK) return;
+
                 try
                 {
-                    string masv = Prompt("Thêm sinh viên", "Nhập mã SV:");
-                    string hoten = Prompt("Thêm sinh viên", "Nhập họ tên:");
-                    string ngaysinh = Prompt("Thêm sinh viên", "Nhập ngày sinh (yyyy-MM-dd):");
-                    string diachi = Prompt("Thêm sinh viên", "Nhập địa chỉ:");
-                    string tendn = Prompt("Tài khoản SV", "Tên đăng nhập:");
-                    string mk = Prompt("Tài khoản SV", "Mật khẩu:");
-
-                    if (string.IsNullOrWhiteSpace(masv) ||
-                        string.IsNullOrWhiteSpace(hoten) ||
-                        string.IsNullOrWhiteSpace(ngaysinh) ||
-                        string.IsNullOrWhiteSpace(diachi) ||
-                        string.IsNullOrWhiteSpace(tendn) ||
-                        string.IsNullOrWhiteSpace(mk))
-                    {
-                        MessageBox.Show("Không được để trống!");
-                        return;
-                    }
-
                     using (SqlConnection conn = new SqlConnection(connectionString))
                     {
                         conn.Open();
@@ -193,57 +516,60 @@
                         SqlCommand cmd = new SqlCommand("SP_INS_PUBLIC_SINHVIEN", conn);
                         cmd.CommandType = CommandType.StoredProcedure;
 
-                        cmd.Parameters.AddWithValue("@MASV", masv);
-                        cmd.Parameters.AddWithValue("@HOTEN", hoten);
-                        cmd.Parameters.AddWithValue("@NGAYSINH", DateTime.Parse(ngaysinh));
-                        cmd.Parameters.AddWithValue("@DIACHI", diachi);
+                        cmd.Parameters.AddWithValue("@MASV", dlg.MaSV);
+                        cmd.Parameters.AddWithValue("@HOTEN", dlg.HoTen);
+                        cmd.Parameters.AddWithValue("@NGAYSINH", DateTime.Parse(dlg.NgaySinh));
+                        cmd.Parameters.AddWithValue("@DIACHI", dlg.DiaChi);
                         cmd.Parameters.AddWithValue("@MALOP", malop);
-                        cmd.Parameters.AddWithValue("@TENDN", tendn);
-                        cmd.Parameters.AddWithValue("@MK", mk);
-                        cmd.Parameters.AddWithValue("@MANV", manv); // ✔ FIX QUYỀN
+                        cmd.Parameters.AddWithValue("@TENDN", dlg.TenDN);
+                        cmd.Parameters.AddWithValue("@MK", dlg.MatKhau);
+                        cmd.Parameters.AddWithValue("@MANV", manv);
 
                         cmd.ExecuteNonQuery();
                     }
 
-                    MessageBox.Show("Thêm sinh viên thành công!");
+                    MessageBox.Show("✔ Thêm sinh viên thành công!",
+                        "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     LoadStudents();
                 }
                 catch (SqlException ex)
                 {
-                    MessageBox.Show("SQL Error: " + ex.Message);
+                    MessageBox.Show("SQL Error:\n" + ex.Message,
+                        "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Lỗi: " + ex.Message);
+                    MessageBox.Show("Lỗi:\n" + ex.Message,
+                        "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
 
-            private void BtnUpdate_Click(object sender, EventArgs e)
+        // ================= CẬP NHẬT =================
+        private void BtnUpdate_Click(object sender, EventArgs e)
+        {
+            if (dgvStudents.SelectedRows.Count == 0)
             {
-                if (dgvStudents.SelectedRows.Count == 0)
-                {
-                    MessageBox.Show("Vui lòng chọn sinh viên!");
-                    return;
-                }
+                MessageBox.Show("Vui lòng chọn sinh viên cần sửa!",
+                    "Chưa chọn", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-                // ===== lấy dữ liệu cũ =====
-                var row = dgvStudents.SelectedRows[0];
+            var row = dgvStudents.SelectedRows[0];
 
-                string masv = row.Cells["MASV"].Value.ToString();
-                string hotenOld = row.Cells["HOTEN"].Value.ToString();
-                string ngaysinhOld = row.Cells["NGAYSINH"].Value.ToString();
-                string diachiOld = row.Cells["DIACHI"].Value.ToString();
+            string masv = row.Cells["MASV"].Value?.ToString() ?? "";
+            string hoten = row.Cells["HOTEN"].Value?.ToString() ?? "";
+            string ngaysinh = row.Cells["NGAYSINH"].Value?.ToString() ?? "";
+            string diachi = row.Cells["DIACHI"].Value?.ToString() ?? "";
 
-                // ===== nhập lại nhưng có sẵn dữ liệu cũ =====
-                string hoten = Prompt("Cập nhật sinh viên", "Họ tên:", hotenOld);
-                string ngaysinh = Prompt("Cập nhật sinh viên", "Ngày sinh (yyyy-MM-dd):", ngaysinhOld);
-                string diachi = Prompt("Cập nhật sinh viên", "Địa chỉ:", diachiOld);
+            // Format ngày cho đúng yyyy-MM-dd nếu cần
+            if (DateTime.TryParse(ngaysinh, out DateTime dt))
+                ngaysinh = dt.ToString("yyyy-MM-dd");
 
-                if (hoten == "" || ngaysinh == "" || diachi == "")
-                {
-                    MessageBox.Show("Không được để trống!");
-                    return;
-                }
+            // Mở form cập nhật — các ô đã điền sẵn dữ liệu cũ
+            using (StudentFormDialog dlg = new StudentFormDialog(masv, hoten, ngaysinh, diachi))
+            {
+                if (dlg.ShowDialog() != DialogResult.OK) return;
 
                 try
                 {
@@ -254,102 +580,111 @@
                         SqlCommand cmd = new SqlCommand("SP_UPD_PUBLIC_SINHVIEN", conn);
                         cmd.CommandType = CommandType.StoredProcedure;
 
-                        cmd.Parameters.AddWithValue("@MASV", masv);
-                        cmd.Parameters.AddWithValue("@HOTEN", hoten);
-                        cmd.Parameters.AddWithValue("@NGAYSINH", DateTime.Parse(ngaysinh));
-                        cmd.Parameters.AddWithValue("@DIACHI", diachi);
+                        cmd.Parameters.AddWithValue("@MASV", dlg.MaSV);
+                        cmd.Parameters.AddWithValue("@HOTEN", dlg.HoTen);
+                        cmd.Parameters.AddWithValue("@NGAYSINH", DateTime.Parse(dlg.NgaySinh));
+                        cmd.Parameters.AddWithValue("@DIACHI", dlg.DiaChi);
                         cmd.Parameters.AddWithValue("@MALOP", malop);
                         cmd.Parameters.AddWithValue("@MANV", manv);
 
                         cmd.ExecuteNonQuery();
                     }
 
-                    MessageBox.Show("Cập nhật thành công!");
+                    MessageBox.Show("✔ Cập nhật sinh viên thành công!",
+                        "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     LoadStudents();
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    MessageBox.Show("Lỗi:\n" + ex.Message,
+                        "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            }
-
-            // ================= DELETE =================
-            private void BtnDelete_Click(object sender, EventArgs e)
-            {
-                if (dgvStudents.SelectedRows.Count == 0)
-                {
-                    MessageBox.Show("Chọn sinh viên!");
-                    return;
-                }
-
-                string masv = dgvStudents.SelectedRows[0].Cells["MASV"].Value.ToString();
-
-                DialogResult confirm = MessageBox.Show(
-                    "Bạn có chắc muốn xóa sinh viên này?",
-                    "Xác nhận",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Warning);
-
-                if (confirm != DialogResult.Yes)
-                    return;
-
-                try
-                {
-                    using (SqlConnection conn = new SqlConnection(connectionString))
-                    {
-                        conn.Open();
-
-                        SqlCommand cmd = new SqlCommand("SP_DEL_PUBLIC_SINHVIEN", conn);
-                        cmd.CommandType = CommandType.StoredProcedure;
-
-                        cmd.Parameters.AddWithValue("@MASV", masv);
-                        cmd.Parameters.AddWithValue("@MANV", manv); 
-
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    MessageBox.Show("Xóa sinh viên thành công!");
-                    LoadStudents();
-                }
-                catch (SqlException ex)
-                {
-                    MessageBox.Show("Không thể xóa:\n" + ex.Message);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Lỗi hệ thống:\n" + ex.Message);
-                }
-            }
-
-            // ================= SCORE =================
-            private void BtnManageScores_Click(object sender, EventArgs e)
-            {
-                if (dgvStudents.SelectedRows.Count == 0)
-                {
-                    MessageBox.Show("Chọn sinh viên!");
-                    return;
-                }
-
-                string masv = dgvStudents.SelectedRows[0].Cells["MASV"].Value.ToString();
-
-                // ===== LẤY MALOP CỦA SINH VIÊN =====
-                string malopSinhVien = dgvStudents
-                    .SelectedRows[0]
-                    .Cells["MALOP"]
-                    .Value.ToString();
-
-                // ===== SO SÁNH QUYỀN =====
-                if (malopSinhVien.Trim() != this.malop.Trim())
-                {
-                    MessageBox.Show("Bạn không có quyền nhập điểm cho sinh viên lớp này!");
-                    return;
-                }
-
-                ScoreManagementForm f = new ScoreManagementForm(masv, manv, password, this);
-
-                this.Hide();
-                f.ShowDialog();
-                this.Show();
             }
         }
+
+        // ================= XÓA =================
+        private void BtnDelete_Click(object sender, EventArgs e)
+        {
+            if (dgvStudents.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Vui lòng chọn sinh viên cần xóa!",
+                    "Chưa chọn", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string masv = dgvStudents.SelectedRows[0].Cells["MASV"].Value?.ToString() ?? "";
+            string hoten = dgvStudents.SelectedRows[0].Cells["HOTEN"].Value?.ToString() ?? "";
+
+            DialogResult confirm = MessageBox.Show(
+                $"Bạn có chắc muốn xóa sinh viên:\n\n  {masv} — {hoten}?",
+                "Xác nhận xóa",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
+
+            if (confirm != DialogResult.Yes) return;
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    SqlCommand cmd = new SqlCommand("SP_DEL_PUBLIC_SINHVIEN", conn);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@MASV", masv);
+                    cmd.Parameters.AddWithValue("@MANV", manv);
+
+                    cmd.ExecuteNonQuery();
+                }
+
+                MessageBox.Show("✔ Xóa sinh viên thành công!",
+                    "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LoadStudents();
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show("Không thể xóa:\n" + ex.Message,
+                    "Lỗi SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi hệ thống:\n" + ex.Message,
+                    "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // ================= NHẬP ĐIỂM =================
+        private void BtnManageScores_Click(object sender, EventArgs e)
+        {
+            if (dgvStudents.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Vui lòng chọn sinh viên!",
+                    "Chưa chọn", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (classManv.Trim().ToUpper() != manv.Trim().ToUpper())
+            {
+                MessageBox.Show("Bạn không có quyền xem điểm!",
+                    "Từ chối", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return;
+            }
+
+            string masv = dgvStudents.SelectedRows[0].Cells["MASV"].Value?.ToString() ?? "";
+            string malopSinhVien = dgvStudents.SelectedRows[0].Cells["MALOP"].Value?.ToString() ?? "";
+
+            if (malopSinhVien.Trim() != this.malop.Trim())
+            {
+                MessageBox.Show("Bạn không có quyền nhập điểm cho sinh viên lớp này!",
+                    "Từ chối", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return;
+            }
+
+            ScoreManagementForm f = new ScoreManagementForm(masv, manv, password, this);
+            this.Hide();
+            f.ShowDialog();
+            this.Show();
+        }
     }
+}

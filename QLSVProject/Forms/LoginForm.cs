@@ -1,10 +1,13 @@
-﻿using System;
+﻿using Microsoft.Data.SqlClient;
+using QLSVProject;
+using QLSVProject.Helpers;
+using System;
 using System.Configuration;
 using System.Data;
-using Microsoft.Data.SqlClient;
 using System.Drawing;
+using System.Security.Cryptography;
+using System.Text;
 using System.Windows.Forms;
-using QLSVProject.Forms;
 
 namespace QLSVNhomApp
 {
@@ -160,6 +163,31 @@ namespace QLSVNhomApp
 
             btnLogin.Click += BtnLogin_Click;
 
+            // Register link 
+            Label lblRegisterText = new Label()
+            {
+                Text = "Bạn chưa có tài khoản?",
+                Font = new Font("Segoe UI", 9),
+                ForeColor = Color.Gray,
+                AutoSize = true,
+                Location = new Point(90, 215)
+            };
+
+            LinkLabel lnkRegister = new LinkLabel()
+            {
+                Text = "Đăng ký tại đây",
+                Font = new Font("Segoe UI", 9, FontStyle.Bold),
+                AutoSize = true,
+                Location = new Point(250, 215),
+                LinkColor = Color.FromArgb(0, 122, 204),
+                Cursor = Cursors.Hand
+            };
+
+            lnkRegister.LinkClicked += LinkLabelRegister_LinkClicked;
+
+            panelLogin.Controls.Add(lblRegisterText);
+            panelLogin.Controls.Add(lnkRegister);
+
             // ================= ADD CONTROL =================
             panelLogin.Controls.AddRange(new Control[]
             {
@@ -196,20 +224,33 @@ namespace QLSVNhomApp
                         cmd.CommandType = CommandType.StoredProcedure;
 
                         cmd.Parameters.AddWithValue("@TENDN", txtUsername.Text);
-                        cmd.Parameters.AddWithValue("@MK", txtPassword.Text);
+
+                        byte[] hashedMK;
+                        using (SHA256 sha256 = SHA256.Create())
+                        {
+                            hashedMK = sha256.ComputeHash(Encoding.UTF8.GetBytes(txtPassword.Text.Trim()));
+                        }
+                        cmd.Parameters.AddWithValue("@MK",hashedMK);
+
+                        string tendn = txtUsername.Text.Trim();
+                        string mk = txtPassword.Text.Trim();
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
                             if (reader.Read())
                             {
+                                Session.RsaKey = RsaHelper.CreateRSA(tendn + mk);
+
                                 string manv = reader["MANV"].ToString();
+
+                                Session.MaNV = reader["MANV"].ToString();
+                                Session.HoTen = reader["HOTEN"].ToString();
+                                Session.Email = reader["EMAIL"].ToString();
+                                Session.Luong = BitConverter.ToInt32(RsaHelper.Decrypt(Session.RsaKey, (byte[])reader["LUONG"]), 0);
 
                                 MessageBox.Show("Đăng nhập thành công!");
 
-                                var mainForm = new MainForm(
-                                    manv,
-                                    txtUsername.Text,
-                                    txtPassword.Text);
+                                var mainForm = new MainForm(manv, txtUsername.Text, txtPassword.Text);
 
                                 mainForm.FormClosed += (s, args) => Application.Exit();
                                 mainForm.Show();
@@ -227,6 +268,17 @@ namespace QLSVNhomApp
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        // ================ Register ================
+        private void LinkLabelRegister_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            RegisterForm registerForm = new RegisterForm();
+
+            this.Hide();
+            registerForm.ShowDialog(); // modal
+
+            this.Show();
         }
     }
 }

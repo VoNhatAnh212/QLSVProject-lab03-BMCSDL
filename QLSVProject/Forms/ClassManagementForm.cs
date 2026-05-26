@@ -11,7 +11,6 @@ namespace QLSVNhomApp
     {
         private readonly string connectionString =
             ConfigurationManager.ConnectionStrings["QLSVNhomConnection"].ConnectionString;
-
         private string manv;
         private string password;
         private MainForm mainForm;
@@ -550,12 +549,13 @@ namespace QLSVNhomApp
                 return;
             }
 
-            string malop =
-                dgvClasses.SelectedRows[0]
-                .Cells["MALOP"].Value.ToString();
+            string malop = dgvClasses.SelectedRows[0].Cells["MALOP"].Value.ToString();
+
+            string classManv = dgvClasses.SelectedRows[0].Cells["MANV"].Value.ToString();
 
             StudentManagementForm f =
                 new StudentManagementForm(
+                    classManv,
                     malop,
                     manv,
                     password,
