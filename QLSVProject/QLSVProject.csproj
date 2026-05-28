@@ -186,7 +186,6 @@
     <Compile Include="Forms\StudentManagementForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Helpers\Crypto.cs" />
     <Compile Include="Helpers\RsaHelper.cs" />
     <Compile Include="Helpers\SecurityHelper.cs" />
     <Compile Include="Helpers\Session.cs" />
