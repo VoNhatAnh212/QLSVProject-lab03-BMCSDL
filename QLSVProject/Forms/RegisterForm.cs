@@ -73,7 +73,11 @@ namespace QLSVProject
             txtMaNV = CreateTextBox("Mã nhân viên");
             txtHoTen = CreateTextBox("Họ tên");
             txtEmail = CreateTextBox("Email");
-            txtLuong = CreateTextBox("Lương");
+            txtLuong = CreateTextBox("0");
+            txtLuong.ForeColor = Color.Black;
+            txtLuong.ReadOnly = true;
+            txtLuong.Enabled = false; // hoặc bỏ dòng này nếu vẫn muốn nhìn rõ
+
             txtUsername = CreateTextBox("Tên đăng nhập");
             txtPassword = CreateTextBox("Mật khẩu");
             txtPassword.UseSystemPasswordChar = true;
@@ -148,7 +152,7 @@ namespace QLSVProject
             string hoten = txtHoTen.Text.Trim();
             string email = txtEmail.Text.Trim();
             string luongtxt = txtLuong.Text.Trim();
-            int luong = int.Parse(luongtxt);
+            int luong = 0;
             string tendn = txtUsername.Text.Trim();
             string matkhau = txtPassword.Text.Trim();
 
@@ -181,7 +185,7 @@ namespace QLSVProject
                 {
                     conn.Open();
 
-                    using (SqlCommand cmd = new SqlCommand("SP_INS_PUBLIC_NHANVIEN", conn))
+                    using (SqlCommand cmd = new SqlCommand("SP_INS_PUBLIC_ENCRYPT_NHANVIEN", conn))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
 
@@ -209,11 +213,6 @@ namespace QLSVProject
                 MessageBox.Show("Đăng ký thành công!", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 this.Close();
-                //LoginForm login = new LoginForm();
-
-                //this.Hide();
-                //login.ShowDialog();
-                //this.Close();
             }
             catch (Exception ex)
             {

@@ -219,7 +219,7 @@ namespace QLSVNhomApp
                 {
                     conn.Open();
 
-                    using (SqlCommand cmd = new SqlCommand("SP_SEL_PUBLIC_NHANVIEN", conn))
+                    using (SqlCommand cmd = new SqlCommand("SP_SEL_PUBLIC_ENCRYPT_NHANVIEN", conn))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
 
